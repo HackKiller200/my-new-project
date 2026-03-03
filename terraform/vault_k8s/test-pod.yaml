@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-vault-pod
+  namespace: default
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "myapp"
+    vault.hashicorp.com/agent-inject-secret-config: "secret/data/myapp/config"
+    vault.hashicorp.com/agent-inject-template-config: |
+      {{- with secret "secret/data/myapp/config" -}}
+      export user="{{ .Data.data.username }}"
+      export password="{{ .Data.data.password }}"
+      {{- end -}}
+    vault.hashicorp.com/secret-volume-path: "/vault/secrets"
+spec:
+  serviceAccountName: myapp
+  containers:
+  - name: nginx
+    image: nginx:latest
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+          sleep 5;
+          ls -la /vault/secrets/
+          echo "Секрет:"
+          cat /vault/secrets/config
+          nginx -g "daemon off;"
