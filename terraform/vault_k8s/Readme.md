@@ -7,7 +7,7 @@
 - `vault login <рут токен>`
 - `vault auth enable kubernetes`
 - `vault write auth/kubernetes/config kubernetes_host="https://kubernetes.default.svc:443" issuer="https://kubernetes.default.svc.cluster.local"` #настройка аутентификации для кубера 
-- `cat > /tmp/policy.hcl << 'EOF' path "secret/data/myapp/*" {capabilities = ["read"]}EOF``#создание политики 
+- `cat > /tmp/policy.hcl << 'EOF' path "secret/data/myapp/*" {capabilities = ["read"]}EOF` #создание политики 
 - ` vault policy write myapp-kv-rw /tmp/policy.hcl`#запись политики
 - ` vault write auth/kubernetes/role/myapp bound_service_account_names=myapp bound_service_account_namespaces=default policies=myapp-kv-rw ttl=168h`#создание роли
 - `vault secrets enable -path=secret kv-v2`
