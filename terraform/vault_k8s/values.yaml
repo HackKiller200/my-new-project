@@ -18,10 +18,6 @@ server:
       api_addr = "http://vault.vault.svc.cluster.local:8200"
       cluster_addr = "https://vault-0.vault-internal:8201"
       disable_mlock = true
-      telemetry {
-        statsite_address = ""
-        disable_hostname = true
-      }
   dataStorage:
     enabled: true
     size: 2Gi
