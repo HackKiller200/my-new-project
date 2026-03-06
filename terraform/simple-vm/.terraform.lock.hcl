@@ -1,0 +1,23 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/yandex-cloud/yandex" {
+  version     = "0.191.0"
+  constraints = "0.191.0"
+  hashes = [
+    "h1:nY8AeTA1tIE1acb61AVHCrobdGayezmTT7RVUzNsiz0=",
+    "zh:12fa5f2589986228018df66f91600d9343b24de9ad240820e19e8bc71a310997",
+    "zh:16c229277819fdcd78db4e66344d1ed4de7fe9d8960b83db90baa7d1b00926fa",
+    "zh:1b323d95089d99b2331d3aaad56415474199a19931b2c8d514017bac2e858368",
+    "zh:5b6eb7d73a99fbe4c0e7b223d7e5f5f4927595e63c04658bfb1613c06d86ff14",
+    "zh:7376c61074b67fcf74a483571a9878131b9269ddacd860c684e3ce23eb143d5d",
+    "zh:73f2a55c9daac8ebe7f5c30249c02af5f2d0a9654468817923765fb879bf8203",
+    "zh:75bdf4c29d29750c380568cdcca68f142762809c598625b79589026137d7c6a1",
+    "zh:869818890421a9930cdcffbbc0d29bd066896700cde26525ca4d3455163d8d6a",
+    "zh:872d6edf8092946e7f2d27752e7418124518816f7eab67b5547db2613d9b0f52",
+    "zh:98ea26be17e4cd6eb45a28f91541858ffd4b656604147c34660507b79759a534",
+    "zh:c86bd6dfb900672756363cafef96546929140bed2ee5582a20d662be1cd6301b",
+    "zh:d277dfac2884f635534a43077ade29feec8406813f7acf0a767ace6ffa073f01",
+    "zh:f4c5914d367c3d9256440ec1a7c2ede2b380697ef024cce06c2b145f0351c29a",
+  ]
+}

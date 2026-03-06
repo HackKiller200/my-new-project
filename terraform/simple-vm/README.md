@@ -1,0 +1,10 @@
+- `curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash`#ссылка на скачивание яндекс-клауда
+- `https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb`#получение токена
+- `yc init`#иницализация 
+- `yc compute image get-latest-from-family ubuntu-2204-lts --folder-id standard-images`#поиск убунту 22.04
+- `yc resource-manager cloud list` #получение информации о cloud id
+- `yc resource-manager folder list`#folder if
+- `terraform init`
+- `terraform plan -var-file="vars.tfvars" -var-file="creds.tfvars"` #просмотр плана
+- `terraform apply -var-file="vars.tfvars" -var-file="creds.tfvars"`
+- `ssh ubuntu@ip`
