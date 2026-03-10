@@ -1,0 +1,16 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+positions:
+  filename: /tmp/positions.yaml
+clients:
+  - url: http://172.20.10.2:3100/loki/api/v1/push #ip центрального сервера
+scrape_configs:
+  - job_name: authlog
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: authlog
+          host: remote-server-172.20.10.4 #ip удаленного сервера
+          __path__: /var/log/auth.log

@@ -110,3 +110,4 @@ kubectl apply -f calico.yaml
 sleep 60
 
 kubectl get pods --all-namespaces
+

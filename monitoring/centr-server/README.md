@@ -1,0 +1,8 @@
+- `mkdir -p monitoring`
+- `cp -r centr-server/docker-compose.yml monitoring `
+- `cp -r centr-server/grafana monitoring `
+- `cp -r centr-server/loki  monitoring `
+- `cd monitoring && docker-compose up -d`
+- `cp -r ssh_monitor  /opt/`
+- `chmod +x /opt/ssh_monitor/monitor.py`
+- `python3 /opt/ssh_monitor/monitor.py`
