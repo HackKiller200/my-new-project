@@ -48,7 +48,7 @@ def parse_ssh_log(line):
         method = match_success.group(1)
         user = match_success.group(2)
         ip = match_success.group(3)
-        return "SUCCESS",, ip, user, f"Метод: {method}"
+        return "SUCCESS", ip, user, f"Метод: {method}"
     match_fail = re.search(r'Failed password for (?:invalid user )?(.+?) from (\d+\.\d+\.\d+\.\d+)', line)
     if match_fail:
         user = match_fail.group(1)

@@ -1,0 +1,19 @@
+[Unit]
+Description=SSH Monitor Service
+After=network.target loki.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/ssh_monitor
+ExecStart=/usr/bin/python3 /opt/ssh_monitor/monitor1.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ssh-monitor
+
+[Install]
+WantedBy=multi-user.target

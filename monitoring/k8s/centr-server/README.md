@@ -1,0 +1,18 @@
+#Central Server Monitoring
+-`kubectl apply -f namespace.yaml`
+-`kubectl apply -f loki-configmap.yaml`
+-`kubectl apply -f loki-pvc.yaml`
+-`kubectl apply -f loki-deployment.yaml`
+-`kubectl apply -f loki-service.yaml`
+-`kubectl apply -f loki-external-service.yaml`
+-`kubectl apply -f grafana-configmap.yaml`
+-`kubectl apply -f grafana-pvc.yaml`
+-`kubectl apply -f grafana-deployment.yaml`
+-`kubectl apply -f grafana-service.yaml`
+- `cp -r ssh-monitor.service /etc/systemd/system`
+- `mkdir -p /opt/ssh_monitor`
+- `cp -r monitor1.py /opt/ssh_monitor`
+- `chmod +x /opt/ssh_monitor/monitor1.py`
+- `sudo systemctl daemon-reload`
+- `sudo systemctl start ssh-monitor`
+- `sudo systemctl enable ssh-monitor`
