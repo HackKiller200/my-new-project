@@ -24,6 +24,3 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore secret files
-**/creds.tfvars
-**/vars.tfvars
