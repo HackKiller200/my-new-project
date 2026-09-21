@@ -1,0 +1,127 @@
+fluent-bit:
+  enabled: true
+  kind: DaemonSet
+  nameOverride: fluent-bit
+  fullnameOverride: fluent-bit
+
+  image:
+    repository: .../fluent/fluent-bit
+    tag: "5.1.1"
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    create: true
+    name: fluent-bit
+    automountServiceAccountToken: true
+
+  rbac:
+    create: true
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+
+  nodeSelector: {}
+  affinity: {}
+
+  tolerations:
+    - operator: Exists
+
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    readOnlyRootFilesystem: false
+
+  podSecurityContext: {}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  service:
+    type: ClusterIP
+    port: 2020
+
+  serviceMonitor:
+    enabled: false
+
+  testFramework:
+    enabled: false
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /api/v2/health
+      port: http
+
+  config:
+    service: |
+      [SERVICE]
+          Daemon        Off
+          Flush         1
+          Log_Level     info
+
+          Parsers_File  /fluent-bit/etc/parsers.conf
+          Parsers_File  /fluent-bit/etc/conf/custom_parsers.conf
+
+          HTTP_Server   On
+          HTTP_Listen   0.0.0.0
+          HTTP_Port     2020
+          Health_Check  On
+    inputs: |
+      [INPUT]
+          Name              tail
+          Path              /var/log/containers/*.log
+          Tag               kube.*
+
+          multiline.parser  docker, cri
+
+          # Сохраняет позицию чтения логов.
+          # После рестарта Fluent Bit не начинает читать всё заново.
+          DB                /var/log/flb_kube.db
+          DB.Sync           Normal
+          DB.Locking        True
+
+          Refresh_Interval  5
+          Mem_Buf_Limit     20MB
+          Skip_Long_Lines   On
+    filters: |
+      [FILTER]
+          Name                  kubernetes
+          Match                 kube.*
+
+          # Kubernetes API
+          Kube_URL              https://kubernetes.default.svc:443
+          Kube_CA_File          /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          Kube_Token_File       /var/run/secrets/kubernetes.io/serviceaccount/token
+          Kube_Tag_Prefix       kube.var.log.containers.
+          tls.verify            Off
+          tls.verify_hostname   Off
+          tls.debug             1
+          Labels                On
+          Annotations           Off
+          Buffer_Size           0
+          Merge_Log             On
+          Merge_Log_Key         log_processed
+          Keep_Log              On
+          K8S-Logging.Parser    Off
+          K8S-Logging.Exclude   Off
+    outputs: |
+      [OUTPUT]
+          Name         udp
+          Match        kube.*
+          Host         YOUR_GATEWAY_IP
+          Port         YOUR_GATEWAY_PORT
+          Format       json
+          Retry_Limit  3
+
+  logLevel: info
