@@ -1,0 +1,127 @@
+loki:
+  enabled: true
+
+  fullnameOverride: loki
+
+  deploymentMode: SingleBinary
+
+  loki:
+    auth_enabled: false
+
+    image:
+      registry: docker.io
+      repository: grafana/loki
+      tag: "3.5.7"
+      pullPolicy: IfNotPresent
+
+    commonConfig:
+      path_prefix: /var/loki
+      replication_factor: 1
+
+    storage:
+      type: filesystem
+
+      bucketNames:
+        chunks: "fake-bucket-local-fs"
+        ruler: "fake-bucket-local-fs"
+        admin: "fake-bucket-local-fs"
+
+      filesystem:
+        chunks_directory: /var/loki/chunks
+        rules_directory: /var/loki/rules
+
+    schemaConfig:
+      configs:
+        - from: "2024-04-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+
+    limits_config:
+      retention_period: 120h
+
+      reject_old_samples: true
+      reject_old_samples_max_age: 120h
+
+      max_cache_freshness_per_query: 10m
+      split_queries_by_interval: 15m
+      query_timeout: 300s
+      volume_enabled: true
+
+    compactor:
+      working_directory: /var/loki/compactor
+
+      compaction_interval: 10m
+      apply_retention_interval: 10m
+
+      retention_enabled: true
+
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 50
+
+      delete_request_store: filesystem
+
+  singleBinary:
+    replicas: 1
+
+    persistence:
+      enabled: true
+      size: 1Ti
+      storageClass: null
+
+      enableStatefulSetAutoDeletePVC: false
+      whenDeleted: Retain
+      whenScaled: Retain
+
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 3100
+
+  write:
+    replicas: 0
+
+  read:
+    replicas: 0
+
+  backend:
+    replicas: 0
+
+  gateway:
+    enabled: false
+
+  lokiCanary:
+    enabled: false
+
+  minio:
+    enabled: false
+
+  chunksCache:
+    enabled: false
+
+  resultsCache:
+    enabled: false
+
+  test:
+    enabled: false
+
+  rollout_operator:
+    enabled: false
+
+  enterprise:
+    enabled: false
+
+  monitoring:
+    serviceMonitor:
+      enabled: false

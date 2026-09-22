@@ -1,0 +1,117 @@
+promtail:
+  enabled: true
+
+  fullnameOverride: promtail
+
+  daemonset:
+    enabled: true
+
+  deployment:
+    enabled: false
+
+  image:
+    registry: YOUR_INTERNAL_REGISTRY
+    repository: grafana/promtail
+    tag: "3.5.1"
+    pullPolicy: IfNotPresent
+
+  imagePullSecrets: []
+
+  serviceAccount:
+    create: true
+    name: promtail
+    automountServiceAccountToken: true
+
+  automountServiceAccountToken: true
+
+  rbac:
+    create: true
+    pspEnabled: false
+
+  hostNetwork: false
+
+  nodeSelector: {}
+
+  affinity: {}
+
+  tolerations:
+    - operator: Exists
+
+  podSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+
+  readinessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  livenessProbe: {}
+
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+
+  networkPolicy:
+    enabled: false
+
+  configmap:
+    enabled: false
+
+  config:
+    enabled: true
+
+    logLevel: info
+    logFormat: logfmt
+    serverPort: 3101
+
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+
+    positions:
+      filename: /run/promtail/positions.yaml
+
+    enableTracing: false
+
+    snippets:
+      pipelineStages:
+        - cri: {}
+
+      addScrapeJobLabel: false
+
+      extraLimitsConfig: ""
+
+      extraServerConfigs: |
+        http_listen_address: 0.0.0.0
+
+      extraScrapeConfigs: ""
+
+      extraRelabelConfigs: []
+
+  serviceMonitor:
+    enabled: false
+
+  sidecar:
+    configReloader:
+      enabled: false
